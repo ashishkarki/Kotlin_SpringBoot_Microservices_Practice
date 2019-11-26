@@ -1,0 +1,25 @@
+spring:
+  profiles:
+    active: "development"
+
+service:
+  message:
+    text: "hello from app properties"
+
+---
+
+spring:
+  profiles: "development"
+
+service:
+  message:
+    text: "HI from app properties using development profile"
+
+---
+
+spring:
+  profiles: "production"
+
+service:
+  message:
+    text: "Welcome from app properties using production profile"
