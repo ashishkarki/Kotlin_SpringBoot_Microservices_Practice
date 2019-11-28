@@ -1,6 +1,8 @@
 package com.microservices.kotlin.chapter3.controller
 
+import com.microservices.kotlin.chapter3.error.CustomerNotFoundException
 import com.microservices.kotlin.chapter3.model.Customer
+import com.microservices.kotlin.chapter3.model.ErrorResponse
 import com.microservices.kotlin.chapter3.service.CustomerService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -19,10 +21,9 @@ class CustomerController {
 
     @GetMapping(value = ["/customer/{id}"])
     fun getCustomer(@PathVariable id: Int): ResponseEntity<Customer?> {
-        val customer = customerService.getCustomer(id)
-        val status = if (customer == null) HttpStatus.NOT_FOUND else HttpStatus.OK
+        val customer = customerService.getCustomer(id) ?: throw CustomerNotFoundException("customer with $id not found")
 
-        return ResponseEntity(customer, status)
+        return ResponseEntity(customer, HttpStatus.OK)
     }
 
     @GetMapping(value = ["/customers"])
@@ -43,17 +44,20 @@ class CustomerController {
     }
 
     @DeleteMapping(value = ["/customer/{id}"])
-    fun deleteCustomer(@PathVariable id: Int): ResponseEntity<String> {
+    fun deleteCustomer(@PathVariable id: Int): ResponseEntity<Any> {
         var status = HttpStatus.NOT_FOUND
-        var message = "entity not found!!"
 
-        if (isCustomerPresent(id)) {
+        // the thing about this pattern is we don't use any controllerAdvice but throw error using only our classes
+        return if (isCustomerPresent(id)) {
             customerService.delete(id)
             status = HttpStatus.OK
-            message = "entity deleted successfully"
+
+            ResponseEntity("entity deleted successfully", status)
+        } else {
+            ResponseEntity(ErrorResponse("Customer not found", "Customer with $id wasn't found"), status)
         }
 
-        return ResponseEntity(message, status)
+
     }
 
     @PutMapping(value = ["/customer/{id}"])

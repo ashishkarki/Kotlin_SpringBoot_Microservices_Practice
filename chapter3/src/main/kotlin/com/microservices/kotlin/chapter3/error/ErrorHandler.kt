@@ -17,6 +17,12 @@ class ErrorHandler {
                 HttpStatus.BAD_REQUEST)
     }
 
+    @ExceptionHandler(CustomerNotFoundException::class)
+    fun CustomerNotFoundExceptionHandler(servletRequest: HttpServletRequest, exception: Exception): ResponseEntity<ErrorResponse> {
+        return ResponseEntity(ErrorResponse("No such customer!!", exception.message!!),
+                HttpStatus.BAD_REQUEST) // exception.message ?: "invalid customer information"
+    }
+
     @ExceptionHandler(java.lang.Exception::class)
     fun GenericExceptionHandler(servletRequest: HttpServletRequest, exception: Exception): ResponseEntity<ErrorResponse> {
         return ResponseEntity(ErrorResponse("Some error occured", exception.message ?: "Error, Please contact support"),
