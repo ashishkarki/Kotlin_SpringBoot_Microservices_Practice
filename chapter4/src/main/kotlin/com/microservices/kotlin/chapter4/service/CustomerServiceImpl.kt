@@ -23,14 +23,15 @@ class CustomerServiceImpl : CustomerService {
         val customers = ConcurrentHashMap<Int, Customer>(initialCustomers.associateBy(Customer::id))
     }
 
-    override fun getCustomer(id: Int): Mono<Customer> = customers[id]?.toMono() ?: Mono.empty() // Mono.just(customers[id]!!)
+    override fun getCustomer(id: Int): Mono<Customer> = customers[id]?.toMono()
+            ?: Mono.empty() // Mono.just(customers[id]!!)
 
     override fun searchCustomers(filter: String): Flux<Customer> =
             customers.filter {
                 it.value.name.contains(filter, true)
             }.map(Map.Entry<Int, Customer>::value).toFlux()
 
-    override fun createCustomer(customerMono: Mono<Customer>): Mono<*> {
+    override fun createCustomer(customerMono: Mono<Customer>): Mono<Customer> {
         // this will cause a disposable object to be returned back
 //        return customerMono.subscribe {
 //            customers[it.id] = it
@@ -39,8 +40,8 @@ class CustomerServiceImpl : CustomerService {
         // if we want to return an empty object, we use a map like so
         return customerMono.map {
             customers[it.id] = it
-            // it // just an example: this line will cause the resultant object to be returned
-            Mono.empty<Any>() // this line causes an empty object along with any result (result is none if using .map)
+            it // just an example: this line will cause the resultant object to be returned
+            // Mono.empty<Any>() // this line causes an empty object along with any result (result is none if using .map)
         }
     }
 }
