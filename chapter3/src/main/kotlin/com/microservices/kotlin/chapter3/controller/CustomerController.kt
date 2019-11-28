@@ -30,7 +30,7 @@ class CustomerController {
         var status = HttpStatus.NOT_FOUND
         val foundCustomers = customerService.searchCustomers(filter)
 
-        if (foundCustomers != null) status = HttpStatus.OK
+        if (!foundCustomers.isNullOrEmpty()) status = HttpStatus.OK
 
         return ResponseEntity(foundCustomers, status)
     }
@@ -47,7 +47,7 @@ class CustomerController {
         var status = HttpStatus.NOT_FOUND
         var message = "entity not found!!"
 
-        if (customerService.getCustomer(id) != null) {
+        if (isCustomerPresent(id)) {
             customerService.delete(id)
             status = HttpStatus.OK
             message = "entity deleted successfully"
@@ -60,11 +60,13 @@ class CustomerController {
     fun updateCustomer(@PathVariable id: Int, @RequestBody customer: Customer): ResponseEntity<Unit> {
         var status = HttpStatus.NOT_FOUND
 
-        if (customerService.getCustomer(id) !== null) {
+        if (isCustomerPresent(id)) {
             customerService.updateCustomer(id, customer)
             status = HttpStatus.ACCEPTED
         }
 
         return ResponseEntity(Unit, status)
     }
+
+    private fun isCustomerPresent(id: Int): Boolean = customerService.getCustomer(id) != null
 }
