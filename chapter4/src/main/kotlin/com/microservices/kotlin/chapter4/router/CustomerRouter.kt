@@ -1,27 +1,28 @@
 package com.microservices.kotlin.chapter4.router
 
-import com.microservices.kotlin.chapter4.model.Customer
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.stereotype.Component
-import org.springframework.web.reactive.function.server.ServerRequest
-import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.router
-import reactor.core.publisher.Mono
-import reactor.core.publisher.toMono
 
 @Component
-class CustomerRouter {
+class CustomerRouter(private val customerHandler: CustomerHandler) {
+
+//    @Autowired
+//    private lateinit var customerHandler: CustomerHandler
 
     @Bean
     fun customRoutes() = router {
         "/functional".nest {
             "/customer".nest {
-                GET("/") { it: ServerRequest ->
-                    ServerResponse.ok().body(
-                            Mono.just(Customer(1, "functional web coding")),
-                            Customer::class.java
-                    )
-                }
+                //                GET("/") { it: ServerRequest ->
+//                    customerHandler.get(it)
+//                }
+                GET("/{id}", customerHandler::get)
+                POST("/", customerHandler::get)
+            }
+            "/customers".nest {
+                GET("/", customerHandler::search)
             }
         }
     }

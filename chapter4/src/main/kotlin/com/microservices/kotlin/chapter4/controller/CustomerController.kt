@@ -15,7 +15,7 @@ class CustomerController {
     private lateinit var customerService: CustomerService
 
     @GetMapping(value = ["/customer/{id}"])
-    fun getCustomer(@PathVariable id: Int): ResponseEntity<Mono<Customer?>> {
+    fun getCustomer(@PathVariable id: Int): ResponseEntity<Mono<Customer>> {
         val customer = customerService.getCustomer(id)
 
         return ResponseEntity(customer, HttpStatus.OK)
