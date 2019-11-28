@@ -40,6 +40,7 @@ class CustomerServiceImpl : CustomerService {
         return customerMono.map {
             customers[it.id] = it
             // it // just an example: this line will cause the resultant object to be returned
+            Mono.empty<Any>() // this line causes an empty object along with any result (result is none if using .map)
         }
     }
 }
