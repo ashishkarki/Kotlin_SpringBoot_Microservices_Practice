@@ -1,14 +1,13 @@
 package com.microservices.kotlin.chapter4.router
 
+import com.microservices.kotlin.chapter4.error.ErrorResponse
 import com.microservices.kotlin.chapter4.model.Customer
 import com.microservices.kotlin.chapter4.service.CustomerService
-import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.BodyInserters.fromObject
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse.*
 import org.springframework.web.reactive.function.server.bodyToMono
-import reactor.core.publisher.Mono
 import java.net.URI
 
 @Component
@@ -29,5 +28,10 @@ class CustomerHandler(private val customerService: CustomerService) {
             customerService.createCustomer(serverRequest.bodyToMono()).flatMap {
                 // status(HttpStatus.CREATED).body(fromObject(it))
                 created(URI.create("/functional/customer/${it.id}")).build()
+            }.onErrorResume(Exception::class.java) {
+                badRequest().body(
+                        fromObject(ErrorResponse(
+                                "Error creating object",
+                                it.message ?: "error creating")))
             }
 }

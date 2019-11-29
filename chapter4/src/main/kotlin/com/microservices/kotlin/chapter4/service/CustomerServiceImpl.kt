@@ -1,5 +1,6 @@
 package com.microservices.kotlin.chapter4.service
 
+import com.microservices.kotlin.chapter4.error.CustomerExistException
 import com.microservices.kotlin.chapter4.model.Customer
 import com.microservices.kotlin.chapter4.model.Customer.Telephone
 import org.springframework.stereotype.Service
@@ -38,10 +39,20 @@ class CustomerServiceImpl : CustomerService {
 //        }.toMono()
 
         // if we want to return an empty object, we use a map like so
-        return customerMono.map {
-            customers[it.id] = it
-            it // just an example: this line will cause the resultant object to be returned
-            // Mono.empty<Any>() // this line causes an empty object along with any result (result is none if using .map)
+        //return customerMono.map {
+        //customers[it.id] = it
+        //it // just an example: this line will cause the resultant object to be returned
+        // Mono.empty<Any>() // this line causes an empty object along with any result (result is none if using .map)
+        //}
+
+        // a sample of how we can return an exception too
+        return customerMono.flatMap {
+            if (customers[it.id] == null) {
+                customers[it.id] = it
+                Mono.just(it)
+            } else {
+                Mono.error(CustomerExistException("Customer with ${it.id} already exists"))
+            }
         }
     }
 }
