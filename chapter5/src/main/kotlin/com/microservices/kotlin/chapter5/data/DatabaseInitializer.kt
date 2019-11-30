@@ -8,8 +8,9 @@ import org.springframework.data.mongodb.core.ReactiveMongoOperations
 import org.springframework.stereotype.Component
 import javax.annotation.PostConstruct
 
-@Component
-class DatabaseInitializer {
+// this class is no longer used, so we don't want to scan it
+// @Component
+/*class DatabaseInitializer {
     @Autowired
     private lateinit var customerRepository: CustomerRepository
 
@@ -36,8 +37,8 @@ class DatabaseInitializer {
 //        }
 
         // since we are using a repository, we don't need all the logic to create/check collections
-        customerRepository.saveAll(initialCustomers).subscribe {
-            println("Default customers created")
-        }
+//        customerRepository.saveAll(initialCustomers).subscribe {
+//            println("Default customers created")
+//        }
     }
-}
+}*/
