@@ -1,0 +1,3 @@
+microservice:
+  example:
+    greetings: "hello Production Greetings from configuration server"
