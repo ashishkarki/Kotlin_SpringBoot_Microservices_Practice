@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/chapter06-discovery-server.iml" filepath="$PROJECT_DIR$/.idea/chapter06-discovery-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/chapter06-discovery-server_/chapter06-discovery-server.iml" filepath="$PROJECT_DIR$/chapter06-discovery-server_/chapter06-discovery-server.iml" />
     </modules>
   </component>
 </project>
