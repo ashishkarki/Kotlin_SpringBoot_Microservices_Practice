@@ -1,6 +1,7 @@
 package com.microservice.kotlin.chapter09.service
 
-
+import org.junit.Assert
+import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -9,18 +10,21 @@ import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(SpringRunner::class)
 @SpringBootTest
-class CustomerServiceImplTest {
+class CustomerServiceTest {
 
     @Autowired
-    lateinit var customerServiceImpl: CustomerServiceImpl
+    lateinit var customerService: CustomerService
 
     @Test
-    fun getCustomer() {
-        customerServiceImpl.getCustomer(1)
+    fun `we should get a customer with a valid name`() {
+        val customer = customerService.getCustomer(1)
+        assertNotNull(customer)
+        assertEquals(customer?.name, "Kotlin")
     }
 
     @Test
-    fun getAllCustomers() {
-        customerServiceImpl.getAllCustomers()
+    fun `we should get all customers`() {
+        val customers = customerService.getAllCustomers()
+        assertTrue(customers.size == 3)
     }
 }

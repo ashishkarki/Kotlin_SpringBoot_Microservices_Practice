@@ -1,4 +1,3 @@
 package com.microservice.kotlin.chapter09.model
 
-class Customer {
-}
+data class Customer(val id: Int, val name: String)
