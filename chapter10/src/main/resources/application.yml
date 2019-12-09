@@ -2,7 +2,10 @@ management:
   endpoints:
     web:
       exposure:
-        include: info, health, metrics, trace, beans, mappings
+        include: "*"
+  endpoint:
+    health:
+      show-details: "ALWAYS"
 
 info:
   app:
