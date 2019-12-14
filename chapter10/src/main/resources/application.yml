@@ -1,8 +1,11 @@
 management:
   endpoints:
     web:
+      base-path: "/management"
       exposure:
         include: "*"
+    server:
+      port: "8089"
   endpoint:
     health:
       show-details: "ALWAYS"
